@@ -1,50 +1,31 @@
-// script.js
-const loginForm = document.getElementById('login-form');
-const signupLink = document.getElementById('signup-link');
-const demoLink = document.getElementById('demo-link');
+// translator.js
+const inputText = document.getElementById('input-text');
+const languageSelect = document.getElementById('language-select');
+const translateBtn = document.getElementById('translate-btn');
+const outputText = document.getElementById('output-text');
+const historyList = document.getElementById('history-list');
 
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+translateBtn.addEventListener('click', async () => {
+    const text = inputText.value;
+    const language = languageSelect.value;
     try {
-        const response = await fetch('https://adolfo-blondish-sublaryngeally.ngrok-free.dev/login', {
+        const response = await fetch('https://adolfo-blondish-sublaryngeally.ngrok-free.dev/translate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ text, target_lang: language })
         });
         const data = await response.json();
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            window.location.href = 'translator.html';
-        } else {
-            alert('Invalid credentials');
-        }
+        outputText.value = data.translated_text;
+        addHistoryItem(text, data.translated_text, language);
     } catch (error) {
         console.error(error);
     }
 });
 
-signupLink.addEventListener('click', () => {
-    // Add signup functionality here
-    alert('Signup functionality coming soon!');
-});
-
-demoLink.addEventListener('click', async () => {
-    try {
-        const response = await fetch('https://adolfo-blondish-sublaryngeally.ngrok-free.dev/demo', {
-            method: 'POST'
-        });
-        const data = await response.json();
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            window.location.href = 'translator.html';
-        } else {
-            alert('Demo failed');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-});
+function addHistoryItem(input, output, language) {
+    const historyItem = document.createElement('li');
+    historyItem.textContent = `${input} -> ${output} (${language})`;
+    historyList.appendChild(historyItem);
+}
