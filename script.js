@@ -1,5 +1,6 @@
 // script.js
 const loginForm = document.getElementById('login-form');
+const signupLink = document.getElementById('signup-link');
 const demoLink = document.getElementById('demo-link');
 
 loginForm.addEventListener('submit', async (e) => {
@@ -24,6 +25,11 @@ loginForm.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error(error);
     }
+});
+
+signupLink.addEventListener('click', () => {
+    // Add signup functionality here
+    alert('Signup functionality coming soon!');
 });
 
 demoLink.addEventListener('click', async () => {
